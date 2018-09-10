@@ -1,4 +1,4 @@
-# therevue
+# shopping mall
 
 ## Project setup
 ```
