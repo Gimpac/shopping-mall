@@ -196,19 +196,19 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 .animateDiv {
   position: absolute;
   top: 0px;
   left: 0px;
   width: 50px;
   height: 50px;
+    img{
+        width: 100%;
+        height: 100%;
+    }
 }
 
-.animateDiv img {
-  width: 100%;
-  height: 100%;
-}
 
 #tabHead {
   background-color: skyblue;
@@ -320,9 +320,17 @@ export default {
         }
       });
     },
-
+    //加入购物车
     addToShopCart() {
       this.isShow = true
+
+      //调用store.commit去触发mutations方法
+      const goods = {
+          goodsId:this.$route.params.id,
+          count:this.goodsCount
+      }
+
+      this.$store.commit('addGoods',goods)
     },
 
     //购物车飞入动画

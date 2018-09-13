@@ -10,23 +10,23 @@
                     <a target="_blank" href="#"></a>
                 </div>
                 <div id="menu" class="right-box">
-                    <span style="display: none;">
-                        <a href="" class="">登录</a>
+                    <span v-show="isLogin">
+                        <router-link to="/login" class="">登录</router-link>
                         <strong>|</strong>
                         <a href="" class="">注册</a>
                         <strong>|</strong>
                     </span>
-                    <span>
+                    <span v-show="!isLogin">
                         <a href="" class="">会员中心</a>
                         <strong>|</strong>
-                        <a>退出</a>
+                        <a @click="checkout">退出</a>
                         <strong>|</strong>
                     </span>
-                    <a href="" class="">
+                    <router-link to="/shopcar" class="">
                         <i id="shoppingCartCount" class="iconfont icon-cart"></i>购物车(
                         <span >
-                            <span>4</span>
-                        </span>)</a>
+                            <span>{{$store.getters.getBuycount}}</span>
+                        </span>)</router-link>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                         </li>
                         <li class="video">
                             <a href="#" class="">
-                                <span class="out" style="top: 0px;">荣华超市</span>
+                                <span class="out" style="top: 0px;">饿了吗超市</span>
                             </a>
                         </li>
                         <li class="down">
@@ -129,7 +129,44 @@ import $ from "jquery"
 //把导入的jquery挂在window
 window.$ = $
 window.jQuery = $
+
+import {bus} from './common/commonBus.js'
+
 export default {
+    data(){
+        return {
+            isLogin:true
+        }
+    },
+    created(){
+        bus.$on('loginSuccess',()=>{           
+            this.isLogin = false
+        })
+       
+    },
+    methods:{
+         //退出
+      checkout(){
+        this.$confirm('确定要退出', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+         this.$axios.get('site/account/logout').then(response=>{
+            if(response.data.status === 0){
+              // 通过编程式导航，跳转到首页
+              this.$router.push({path:'/goodslist'})
+
+              // 更改isLogin为true
+              this.isLogin = true
+            }
+            })
+        }).catch(() => {
+          
+        });
+      
+      }
+    },
     mounted() {
     $("#menu2 li a").wrapInner('<span class="out"></span>');
     $("#menu2 li a").each(function() {
@@ -152,7 +189,9 @@ export default {
         $(".over", this)
           .stop()
           .animate({ top: "-48px" }, 300); // move up - hide
-      }
+      },
+
+     
     );
   }
 }

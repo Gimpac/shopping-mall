@@ -6,10 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 //导入过滤器
 import './filters/filter.js'
 
-//网络请求相关
-import axios from 'axios'
-axios.defaults.baseURL = 'http://47.106.148.205:8899/'
-Vue.prototype.$axios = axios
+
 
 //懒加载
 import VueLazyload from 'vue-lazyload'
@@ -23,8 +20,14 @@ Vue.use(VueLazyload,{
 
 Vue.use(ElementUI)
 
+//导入数据管理仓库store
+import store from './store'
+
+
+
 new Vue({
   router,
+  store,
   render:h => h(App),
   
 
